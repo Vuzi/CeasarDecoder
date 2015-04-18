@@ -13,8 +13,6 @@ object App {
    */
   def main(args: Array[String]) {
     
-    var i:Int = 0;
-    
     if(args.length < 1) {
       println("Usage : prog <sentence to break> [<frequence file>]");
       System.exit(1);
