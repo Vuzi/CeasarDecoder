@@ -42,21 +42,16 @@ class CeasarDecoder(base: String) {
    * string of the object
    */
   private def getEntropy(s:String):Double = {
-    var entropy:Double = 0D;
-    var i:Int = 0;
-
-    // For each character
-    s.map( char => {
-      // If it is a letter
-      if(char.isLetter) {
-        val c = char.toLower; // Convert to lower case
-        i += 1;
-
-        entropy += Math.log(_base.getOrElse(c, 0D));
-      }
-    });
-
-    return  - entropy / Math.log(2D) / i;
+    s.foldLeft[(Int, Double)]((0, 0D)) {
+      case ((i, entropy), char) if char.isLetter =>
+        (
+            i+1,
+            entropy + Math.log(_base.getOrElse(char.toLower, 0D))
+        )
+      case (entropy, _) => entropy
+    } match {
+      case (i, entropy) => - entropy / Math.log(2D) / i
+    }
   }
 
 
