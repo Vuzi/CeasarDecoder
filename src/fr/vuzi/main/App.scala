@@ -12,14 +12,12 @@ object App {
    * Entry point
    */
   def main(args: Array[String]) {
-    
-    var i:Int = 0;
-    
+
     if(args.length < 1) {
       println("Usage : prog <sentence to break> [<frequence file>]");
       System.exit(1);
     }
-    
+
     val sentence:String = args(0);
     val frequence:String = {
       if(args.length >= 2) {
@@ -33,10 +31,10 @@ object App {
         "Sometimes they gave vent to a convulsive laugh, but by no chance did they smile. Their costume consists of a coarse capote of black wool, known in Scandinavian countries as the \"vadmel,\" a broad-brimmed hat, trousers of red serge, and a piece of leather tied with strings for a shoe�a coarse kind of moccasin. The women, though sad-looking and mournful, had rather agreeable features, without much expression. They wear a bodice and petticoat of somber vadmel. When unmarried they wear a little brown knitted cap over a crown of plaited hair; but when married, they cover their heads with a colored handkerchief, over which they tie a white scarf.";
       }
     }
-    
-    new CeasarDecoder(frequence).decode(sentence, (r:String) => {
-      println("Decripted sentence : " + r);
-    });
+
+    CeasarDecoder.decode(sentence, frequence) { result =>
+      println("Decripted sentence : " + result)
+    }
   }
-  
+
 }

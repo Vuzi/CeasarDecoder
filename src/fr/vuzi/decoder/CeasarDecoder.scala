@@ -3,10 +3,7 @@ package fr.vuzi.decoder
 import scala.collection.mutable.Map;
 import java.lang.StringBuilder;
 
-class CeasarDecoder(base: String) {
-
-  val _base : Map[Char, Double] = getFrequence(base);
-
+object CeasarDecoder {
   /**
    * Get the frequence of all the letters contained in the given sequence
    */
@@ -41,11 +38,11 @@ class CeasarDecoder(base: String) {
    * Compute the entropy between the given string and the base
    * string of the object
    */
-  private def getEntropy(s:String):Double = {
+  private def getEntropy(s:String, base: Map[Char, Double]):Double = {
     s.foldLeft[(Int, Double)]((0, 0D)) {
       case ((i, entropy), char) if char.isLetter => (
         i+1,
-        entropy + Math.log(_base.getOrElse(char.toLower, 0D))
+        entropy + Math.log(base.getOrElse(char.toLower, 0D))
       )
       case (entropy, _) => entropy
     } match {
@@ -53,25 +50,18 @@ class CeasarDecoder(base: String) {
     }
   }
 
-
   /**
    * Decode the given string
    */
-  def decode(toDecrypt: String, result:String => Unit) {
-    // Get all the entropies
-    val decryptedEntropies:Map[Double,String] = Map();
-
-    for(i <- 0 until 26) {
-      val decrypted = this.decrypt(toDecrypt, i);
-      val entropy = this.getEntropy(decrypted);
-
+  def decode(toDecrypt: String, base: String)(result:String => Unit) {
+    val _base = getFrequence(base);
+    (0 to 26).foldLeft[Map[Double,String]](Map()) { (decryptedEntropies, i) =>
+      val decrypted = decrypt(toDecrypt, i);
+      val entropy = getEntropy(decrypted, _base);
       println("[" + i + "] " + decrypted + " : " + entropy);
-
-      decryptedEntropies += (entropy -> decrypted);
+      (decryptedEntropies += (entropy -> decrypted))
+    } match { case decryptedEntropies =>
+      result(decryptedEntropies.minBy(_._1)._2);
     }
-
-    // Return the result with the minimum entropy
-    result(decryptedEntropies.minBy(_._1)._2);
   }
-
 }
