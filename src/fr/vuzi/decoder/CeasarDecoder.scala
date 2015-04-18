@@ -1,8 +1,5 @@
 package fr.vuzi.decoder
 
-import scala.collection.mutable.Map;
-import java.lang.StringBuilder;
-
 object CeasarDecoder {
   /**
    * Get the frequence of all the letters contained in the given sequence
@@ -11,11 +8,11 @@ object CeasarDecoder {
     s.foldLeft[(Int, Map[Char, Int])](0, Map.empty) {
       case ((i, acc), char) if char.isLetter || char == ' ' =>
         val c = char.toLower;
-        (i + 1, acc += (c -> (acc.get(c).getOrElse(0) + 1)))
+        (i + 1, acc + (c -> (acc.get(c).getOrElse(0) + 1)))
       case (acc, char) => acc
     } match {
       case (i, occurences) => occurences.foldLeft[Map[Char, Double]](Map.empty) {
-        case (acc, (char, value)) => (acc += (char -> value / i.doubleValue()))
+        case (acc, (char, value)) => (acc + (char -> value / i.doubleValue()))
       }
     }
   }
@@ -59,7 +56,7 @@ object CeasarDecoder {
       val decrypted = decrypt(toDecrypt, i);
       val entropy = getEntropy(decrypted, _base);
       println("[" + i + "] " + decrypted + " : " + entropy);
-      (decryptedEntropies += (entropy -> decrypted))
+      (decryptedEntropies + (entropy -> decrypted))
     } match { case decryptedEntropies =>
       result(decryptedEntropies.minBy(_._1)._2);
     }
