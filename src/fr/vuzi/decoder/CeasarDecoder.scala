@@ -43,11 +43,10 @@ class CeasarDecoder(base: String) {
    */
   private def getEntropy(s:String):Double = {
     s.foldLeft[(Int, Double)]((0, 0D)) {
-      case ((i, entropy), char) if char.isLetter =>
-        (
-            i+1,
-            entropy + Math.log(_base.getOrElse(char.toLower, 0D))
-        )
+      case ((i, entropy), char) if char.isLetter => (
+        i+1,
+        entropy + Math.log(_base.getOrElse(char.toLower, 0D))
+      )
       case (entropy, _) => entropy
     } match {
       case (i, entropy) => - entropy / Math.log(2D) / i
