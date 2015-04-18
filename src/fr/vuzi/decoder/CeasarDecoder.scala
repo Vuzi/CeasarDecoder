@@ -12,9 +12,9 @@ class CeasarDecoder(base: String) {
    */
   private def getFrequence(s: String):Map[Char, Double] = {
     val occurences = s.foldLeft[(Int, Map[Char, Int])](0, Map.empty) {
-      case (acc, char) if char.isLetter || char == ' ' =>
+      case ((i, acc), char) if char.isLetter || char == ' ' =>
         val c = char.toLower;
-        (acc._1 + 1, acc._2 += (c -> (acc._2.get(c).getOrElse(0) + 1)))
+        (i + 1, acc += (c -> (acc.get(c).getOrElse(0) + 1)))
       case (acc, char) => acc
     }
 
