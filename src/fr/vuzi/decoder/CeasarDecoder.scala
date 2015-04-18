@@ -10,19 +10,17 @@ class CeasarDecoder(base: String) {
   /**
    * Get the frequence of all the letters contained in the given sequence
    */
-  private def getFrequence(s: String):Map[Char, Double] = {
-    val occurences = s.foldLeft[(Int, Map[Char, Int])](0, Map.empty) {
+  def getFrequence(s: String):Map[Char, Double] = {
+    s.foldLeft[(Int, Map[Char, Int])](0, Map.empty) {
       case ((i, acc), char) if char.isLetter || char == ' ' =>
         val c = char.toLower;
         (i + 1, acc += (c -> (acc.get(c).getOrElse(0) + 1)))
       case (acc, char) => acc
+    } match {
+      case (i, occurences) => occurences.foldLeft[Map[Char, Double]](Map.empty) {
+        case (acc, (char, value)) => (acc += (char -> value / i.doubleValue()))
+      }
     }
-
-    val frequences = occurences._2.foldLeft[Map[Char, Double]](Map.empty) {
-      case (acc, (char, value)) => (acc += (char -> value / occurences._1.doubleValue()))
-    }
-
-    return frequences;
   }
 
   /**
