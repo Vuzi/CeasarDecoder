@@ -32,15 +32,18 @@ class CeasarDecoder(base: String) {
   /**
    * Decrypt the given string using the provided value
    */
-  def decrypt(s:String, dec:Int):String = s.foldLeft("") {
-    case (acc, char) if char.isLetter =>
-      (char.toLower + dec).toChar match {
-        case c if c > 'z' =>
-          acc + (c - 'z' + 'a' - 1).toChar // Greater than z, force back to the start of the alphabet
-        case c =>
-          acc + c.toChar  // Append the char
-      }
-    case (acc, char) => acc + char // Not a letter, ignore and append to
+  def decrypt(s:String, dec:Int):String = {
+    
+    return s.foldLeft("") {
+      case (acc, char) if char.isLetter =>
+        val c =  (char.toLower + dec).toChar;
+        if(c > 'z')
+            acc + (c - 'z' + 'a' - 1).toChar // Greater than z, force back to the start of the alphabet
+        else
+            acc + c.toChar  // Append the char
+      case (acc, char) => acc + char // Not a letter, ignore and append to
+    }
+    
   }
 
   /**
